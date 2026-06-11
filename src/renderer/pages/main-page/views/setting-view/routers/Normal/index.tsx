@@ -7,7 +7,6 @@ import "./index.scss";
 import { changeLang, getLangList } from "@/shared/i18n/renderer";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { getGlobalContext } from "@/shared/global-context/renderer";
 
 
 export default function Normal() {
@@ -34,24 +33,6 @@ export default function Normal() {
                 ]}
                 renderItem={(item) => t("settings.normal." + item)}
             ></RadioGroupSettingItem>
-            {getGlobalContext().platform === "win32" ? (
-                <RadioGroupSettingItem
-                    label={t("settings.normal.taskbar_thumb")}
-                    keyPath="normal.taskbarThumb"
-                    options={[
-                        "artwork",
-                        "window",
-                    ]}
-                    renderItem={item => {
-                        if (item === "artwork") {
-                            return t("settings.normal.current_artwork");
-                        } else {
-                            return t("settings.normal.main_window");
-                        }
-                    }}
-
-                ></RadioGroupSettingItem>
-            ) : null}
             <RadioGroupSettingItem
                 label={t("settings.normal.max_history_length")}
                 keyPath="normal.maxHistoryLength"

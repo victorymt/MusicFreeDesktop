@@ -1,7 +1,5 @@
 import type { ForgeConfig } from "@electron-forge/shared-types";
-import { MakerZIP } from "@electron-forge/maker-zip";
 import { MakerDeb } from "@electron-forge/maker-deb";
-import { MakerDMG } from "@electron-forge/maker-dmg";
 import { WebpackPlugin } from "@electron-forge/plugin-webpack";
 
 import { mainConfig } from "./config/webpack.main.config";
@@ -23,20 +21,6 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    // new MakerSquirrel({
-    //   exe: "MusicFree",
-    //   setupIcon: path.resolve(__dirname, "resources/logo.ico"),
-    //   setupMsi: "MusicFreeInstaller",
-    // }),
-    new MakerZIP({}, ["darwin"]),
-    new MakerDMG(
-      {
-        // background
-        format: "ULFO",
-      },
-      ["darwin"]
-    ),
-    // new MakerRpm({}),
     new MakerDeb({
       options: {
         name: "MusicFree",

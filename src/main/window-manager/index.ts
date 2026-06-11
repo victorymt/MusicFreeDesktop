@@ -1,13 +1,11 @@
 import { app, BrowserWindow, nativeImage, screen } from "electron";
 import getResourcePath from "@/common/get-resource-path";
 import { IWindowEvents, IWindowManager } from "@/types/main/window-manager";
-import { localPluginName, PlayerState, ResourceName } from "@/common/constant";
+import { localPluginName, ResourceName } from "@/common/constant";
 import voidCallback from "@/common/void-callback";
-import ThumbBarUtil from "@/common/thumb-bar-util";
 import EventEmitter from "eventemitter3";
 import WindowDrag from "@shared/window-drag/main";
 import AppConfig from "@shared/app-config/main";
-import messageBus from "@shared/message-bus/main";
 import { IAppConfig } from "@/types/app-config";
 import debounce from "@/common/debounce";
 
@@ -179,15 +177,13 @@ class WindowManager implements IWindowManager {
         );
 
         mainWindow.on("close", (e) => {
-            if (process.platform === "win32" && AppConfig.getConfig("normal.closeBehavior") === "minimize") {
+            if (AppConfig.getConfig("normal.closeBehavior") === "minimize") {
                 e.preventDefault();
                 mainWindow.hide();
                 mainWindow.setSkipTaskbar(true);
             }
         });
 
-        // 5. 更新thumbbar
-        ThumbBarUtil.setThumbBarButtons(mainWindow, false);
         WindowManager.mainWindow = mainWindow;
 
         // 6. 发出信号
@@ -214,10 +210,6 @@ class WindowManager implements IWindowManager {
         mainWindow.moveTop();
         mainWindow.setSkipTaskbar(false);
 
-        if (process.platform === "win32") {
-            const appState = messageBus.getAppState();
-            ThumbBarUtil.setThumbBarButtons(mainWindow, appState.playerState === PlayerState.Playing);
-        }
     }
 
     public closeMainWindow() {
@@ -361,11 +353,6 @@ class WindowManager implements IWindowManager {
                 });
             }
         });
-
-        if (process.platform === "darwin") {
-            // @ts-ignore ignore error in windows legacy
-            lyricWindow.invalidateShadow();
-        }
 
         WindowManager.lrcWindow = lyricWindow;
         this.emit("WindowCreated", {

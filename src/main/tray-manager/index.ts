@@ -8,54 +8,7 @@ import windowManager from "@main/window-manager";
 import { IAppConfig } from "@/types/app-config";
 import messageBus from "@shared/message-bus/main";
 
-if (process.platform === "darwin") {
-    Menu.setApplicationMenu(
-        Menu.buildFromTemplate([
-            {
-                label: app.getName(),
-                submenu: [
-                    {
-                        label: t("common.about"),
-                        role: "about",
-                    },
-                    {
-                        label: t("common.exit"),
-                        click() {
-                            app.quit();
-                        },
-                    },
-                ],
-            },
-            {
-                label: t("common.edit"),
-                submenu: [
-                    {
-                        label: t("common.undo"),
-                        accelerator: "Command+Z",
-                        role: "undo",
-                    },
-                    {
-                        label: t("common.redo"),
-                        accelerator: "Shift+Command+Z",
-                        role: "redo",
-                    },
-                    { type: "separator" },
-                    { label: t("common.cut"), accelerator: "Command+X", role: "cut" },
-                    { label: t("common.copy"), accelerator: "Command+C", role: "copy" },
-                    { label: t("common.cut"), accelerator: "Command+V", role: "paste" },
-                    { type: "separator" },
-                    {
-                        label: t("common.select_all"),
-                        accelerator: "Command+A",
-                        role: "selectAll",
-                    },
-                ],
-            },
-        ]),
-    );
-} else {
-    Menu.setApplicationMenu(null);
-}
+Menu.setApplicationMenu(null);
 
 class TrayManager {
     private static trayInstance: Tray | null = null;
@@ -76,15 +29,9 @@ class TrayManager {
             }),
         );
 
-        if (process.platform === "linux") {
-            tray.on("click", () => {
-                windowManager.showMainWindow();
-            });
-        } else {
-            tray.on("double-click", () => {
-                windowManager.showMainWindow();
-            });
-        }
+        tray.on("click", () => {
+            windowManager.showMainWindow();
+        });
 
         let debugClickCount = 0;
         let debugClickTime = 0;
@@ -283,7 +230,7 @@ class TrayManager {
         });
         ctxMenu.push({
             label: t("common.exit"),
-            role: process.platform === "win32" ? undefined : "quit",
+            role: "quit",
             click() {
                 windowManager.mainWindow?.removeAllListeners?.();
                 app.exit(0);

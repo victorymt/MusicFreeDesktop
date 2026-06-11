@@ -4,7 +4,6 @@ interface _IAppConfig {
     "normal.maxHistoryLength": number;
     "normal.checkUpdate": boolean;
     "normal.autoLoadMore": boolean;
-    "normal.taskbarThumb": "window" | "artwork";
     "normal.musicListColumnsShown": Array<"duration" | "platform">;
     "normal.language": string;
 
@@ -23,8 +22,6 @@ interface _IAppConfig {
     /** 设备变化时 */
     "playMusic.whenDeviceRemoved": "pause" | "play";
 
-    /** [darwin only] 显示状态栏歌词 */
-    "lyric.enableStatusBarLyric": boolean;
     /** 显示桌面歌词 */
     "lyric.enableDesktopLyric": boolean;
     /** 桌面歌词置顶 */

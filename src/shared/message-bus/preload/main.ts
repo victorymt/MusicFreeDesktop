@@ -1,7 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import EventEmitter from "eventemitter3";
 import { IAppState, ICommand, IPortMessage } from "@shared/message-bus/type";
-import { getGlobalContext } from "@shared/global-context/preload";
 
 const extPorts = new Map<number, MessagePort>();
 const subscribedAppStates = new Map<string | number, Array<keyof IAppState>>();
@@ -12,9 +11,6 @@ const mainProcessSubscribedKeys: Array<keyof IAppState> = [
     "repeatMode",
     "musicItem",
 ];
-if (getGlobalContext().platform === "darwin") {
-    mainProcessSubscribedKeys.push("lyricText");
-}
 subscribedAppStates.set("main", mainProcessSubscribedKeys);
 
 const ee = new EventEmitter();

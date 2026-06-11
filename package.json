@@ -5,8 +5,8 @@
   "description": "一个插件化的音乐播放器",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start -- --disable-gpu-sandbox",
-    "dev": "electron-forge start --inspect-electron",
+    "start": "electron-forge start -- --disable-gpu-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland",
+    "dev": "electron-forge start --inspect-electron -- --disable-gpu-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

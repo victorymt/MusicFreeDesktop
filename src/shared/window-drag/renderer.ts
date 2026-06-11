@@ -1,6 +1,3 @@
-import { getGlobalContext } from "@shared/global-context/renderer";
-
-
 interface IMod {
     dragWindow(position: ICommon.IPoint): void;
 }
@@ -19,29 +16,26 @@ function injectHandler() {
         }
         injected = true;
 
-        if (getGlobalContext().platform !== "win32") {
-            // win32使用make-window-fully-draggable方案
-            window.addEventListener("mousedown", (e) => {
-                startClientPos = {
-                    x: e.clientX,
-                    y: e.clientY,
-                };
-                isMoving = true;
-            });
-            window.addEventListener("mousemove", (e) => {
-                if (startClientPos && isMoving) {
-                    mod.dragWindow({
-                        x: e.screenX - startClientPos.x,
-                        y: e.screenY - startClientPos.y,
-                    });
-                }
-            });
+        window.addEventListener("mousedown", (e) => {
+            startClientPos = {
+                x: e.clientX,
+                y: e.clientY,
+            };
+            isMoving = true;
+        });
+        window.addEventListener("mousemove", (e) => {
+            if (startClientPos && isMoving) {
+                mod.dragWindow({
+                    x: e.screenX - startClientPos.x,
+                    y: e.screenY - startClientPos.y,
+                });
+            }
+        });
 
-            window.addEventListener("mouseup", () => {
-                isMoving = false;
-                startClientPos = null;
-            });
-        }
+        window.addEventListener("mouseup", () => {
+            isMoving = false;
+            startClientPos = null;
+        });
     });
 
     if (document.readyState === "complete") {

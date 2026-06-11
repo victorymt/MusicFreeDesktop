@@ -66,5 +66,5 @@ export const rendererConfig: Configuration = {
       "@shared": path.join(__dirname, "../src/shared")
     },
   },
-  externals: process.platform !== "darwin" ? ["fsevents"] : undefined,
+  externals: ["fsevents"],
 };

@@ -95,7 +95,6 @@ class AppConfig {
                 "normal.closeBehavior": oldConfig.normal?.closeBehavior === "exit" ? "exit_app" : oldConfig.normal?.closeBehavior,
                 "normal.maxHistoryLength": oldConfig.normal?.maxHistoryLength,
                 "normal.checkUpdate": oldConfig.normal?.checkUpdate,
-                "normal.taskbarThumb": oldConfig.normal?.taskbarThumb,
                 "normal.musicListColumnsShown": oldConfig.normal?.musicListColumnsShown,
                 "normal.language": oldConfig.normal?.language,
 
@@ -107,7 +106,6 @@ class AppConfig {
                 "playMusic.audioOutputDevice": oldConfig.playMusic?.audioOutputDevice,
                 "playMusic.whenDeviceRemoved": oldConfig.playMusic?.whenDeviceRemoved,
 
-                "lyric.enableStatusBarLyric": oldConfig.lyric?.enableStatusBarLyric,
                 "lyric.enableDesktopLyric": oldConfig.lyric?.enableDesktopLyric,
                 "lyric.alwaysOnTop": oldConfig.lyric?.alwaysOnTop,
                 "lyric.lockLyric": oldConfig.lyric?.lockLyric,

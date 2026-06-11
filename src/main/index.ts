@@ -1,13 +1,9 @@
-import { app, BrowserWindow, globalShortcut } from "electron";
-import fs from "fs";
-import path from "path";
+import { app, globalShortcut } from "electron";
 import { setAutoFreeze } from "immer";
 import { setupGlobalContext } from "@/shared/global-context/main";
 import { setupI18n } from "@/shared/i18n/main";
 import { handleDeepLink } from "./deep-link";
 import logger from "@shared/logger/main";
-import { PlayerState } from "@/common/constant";
-import ThumbBarUtil from "@/common/thumb-bar-util";
 import windowManager from "@main/window-manager";
 import AppConfig from "@shared/app-config/main";
 import TrayManager from "@main/tray-manager";
@@ -22,51 +18,16 @@ import messageBus from "@shared/message-bus/main";
 import shortCut from "@shared/short-cut/main";
 import voidCallback from "@/common/void-callback";
 
-// portable
-if (process.platform === "win32") {
-    try {
-        const appPath = app.getPath("exe");
-        const portablePath = path.resolve(appPath, "../portable");
-        const portableFolderStat = fs.statSync(portablePath);
-        if (portableFolderStat.isDirectory()) {
-            const appPathNames = ["appData", "userData"];
-            appPathNames.forEach((it) => {
-                app.setPath(it, path.resolve(portablePath, it));
-            });
-        }
-    } catch (e) {
-        // pass
-    }
-}
-
 setAutoFreeze(false);
 
 
-if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-        app.setAsDefaultProtocolClient("musicfree", process.execPath, [
-            path.resolve(process.argv[1]),
-        ]);
-    }
-} else {
-    app.setAsDefaultProtocolClient("musicfree");
-}
+app.setAsDefaultProtocolClient("musicfree");
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
-        app.quit();
-    }
-});
-
-app.on("activate", () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-        windowManager.showMainWindow();
-    }
+    app.quit();
 });
 
 if (!app.requestSingleInstanceLock()) {
@@ -78,9 +39,7 @@ app.on("second-instance", (_evt, commandLine) => {
         windowManager.showMainWindow();
     }
 
-    if (process.platform !== "darwin") {
-        handleDeepLink(commandLine.pop());
-    }
+    handleDeepLink(commandLine.pop());
 });
 
 app.on("open-url", (_evt, url) => {
@@ -106,10 +65,6 @@ app.whenReady().then(async () => {
             AppConfig.setConfig({
                 "normal.language": lang,
             });
-            if (process.platform === "win32") {
-
-                ThumbBarUtil.setThumbBarButtons(windowManager.mainWindow, messageBus.getAppState().playerState === PlayerState.Playing);
-            }
         },
     });
     utils.setup(windowManager);
@@ -126,10 +81,6 @@ app.whenReady().then(async () => {
             const mainWindow = windowManager.mainWindow;
 
             if (mainWindow) {
-                const thumbStyle = AppConfig.getConfig("normal.taskbarThumb");
-                if (process.platform === "win32" && thumbStyle === "artwork") {
-                    ThumbBarUtil.setThumbImage(mainWindow, musicItem?.artwork);
-                }
                 if (musicItem) {
                     mainWindow.setTitle(
                         musicItem.title + (musicItem.artist ? ` - ${musicItem.artist}` : ""),
@@ -140,19 +91,8 @@ app.whenReady().then(async () => {
             }
         } else if ("playerState" in patch) {
             TrayManager.buildTrayMenu();
-            const playerState = patch.playerState;
-
-            if (process.platform === "win32") {
-                ThumbBarUtil.setThumbBarButtons(windowManager.mainWindow, playerState === PlayerState.Playing);
-            }
         } else if ("repeatMode" in patch) {
             TrayManager.buildTrayMenu();
-        } else if ("lyricText" in patch && process.platform === "darwin") {
-            if (AppConfig.getConfig("lyric.enableStatusBarLyric")) {
-                TrayManager.setTitle(patch.lyricText);
-            } else {
-                TrayManager.setTitle("");
-            }
         }
     });
 
