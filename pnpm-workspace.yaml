@@ -1,0 +1,22 @@
+# pnpm workspace 配置 — 从 npm 迁移
+# Electron Forge 不兼容 pnpm 的 symlink 布局，使用传统扁平 node_modules
+packages: []
+
+nodeLinker: hoisted
+
+public-hoist-pattern:
+  - "*sharp*"
+  - "*electron*"
+  - "*better-sqlite3*"
+  - "*webpack*"
+  - "*babel*"
+  - "*eslint*"
+
+allowBuilds:
+  "@parcel/watcher": true
+  better-sqlite3: true
+  electron: true
+  electron-winstaller: true
+  protobufjs: true
+  sharp: true
+  unrs-resolver: true

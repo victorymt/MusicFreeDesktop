@@ -124,12 +124,18 @@ class WindowManager implements IWindowManager {
         });
         mainWindow.on("resize", updateWindowSizeConfig);
 
-        // 2. 加载主界面
+        // 2. 转发渲染进程控制台日志到主进程
+        mainWindow.webContents.on("console-message", (_event, level, message, line, sourceId) => {
+            const prefix = ["","WARN","","ERROR"][level] || "LOG";
+            console.log(`[RENDERER ${prefix}] ${message} (${sourceId}:${line})`);
+        });
+
+        // 3. 加载主界面
         const initUrl = new URL(MAIN_WINDOW_WEBPACK_ENTRY);
         initUrl.hash = `/main/musicsheet/${localPluginName}/favorite`;
         mainWindow.loadURL(initUrl.toString()).then(voidCallback);
 
-        // 3. 开发者工具
+        // 4. 开发者工具
         if (!app.isPackaged) {
             mainWindow.on("ready-to-show", () => {
                 mainWindow.webContents.openDevTools();

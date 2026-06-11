@@ -93,11 +93,11 @@ function VolumeBtn() {
                     tmpVolumeRef.current = 0;
                 }
                 tmpVolumeRef.current =
-          tmpVolumeRef.current === volume
-              ? volume === 0
-                  ? 1
-                  : 0
-              : tmpVolumeRef.current;
+                    tmpVolumeRef.current === volume
+                        ? volume === 0
+                            ? 1
+                            : 0
+                        : tmpVolumeRef.current;
                 trackPlayer.setVolume(tmpVolumeRef.current);
                 tmpVolumeRef.current = volume;
             }}

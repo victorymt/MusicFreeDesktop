@@ -1,4 +1,5 @@
 import type { Configuration } from "webpack";
+import { DefinePlugin } from "webpack";
 import path from "path";
 
 import { rules } from "./webpack.rules";
@@ -48,7 +49,14 @@ export const rendererConfig: Configuration = {
   module: {
     rules,
   },
-  plugins,
+  plugins: [
+    ...plugins,
+    // webpack 5 的 node.__dirname 已废弃；contextIsolation=true 下
+    // __dirname 不可用，必须用 DefinePlugin mock。
+    new DefinePlugin({
+      __dirname: JSON.stringify("/"),
+    }),
+  ],
   resolve: {
     extensions: [".js", ".ts", ".jsx", ".tsx", ".css", ".scss"],
     alias: {

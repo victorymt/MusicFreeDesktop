@@ -47,6 +47,8 @@ const config: ForgeConfig = {
   ],
   plugins: [
     new WebpackPlugin({
+      port: 9090,
+      loggerPort: 9091,
       devContentSecurityPolicy: `default-src * self blob: data: gap: file:; style-src * self 'unsafe-inline' blob: data: gap: file:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap: file:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap: file:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;`,
       mainConfig,
       renderer: {
